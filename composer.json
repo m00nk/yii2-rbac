@@ -3,7 +3,7 @@
     "description": "Silmple RBAC (like in Yii)",
     "type": "yii2-extension",
     "license": "MIT",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "authors": [
         {
             "name": "Dmitrij Sheremetjev",

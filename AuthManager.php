@@ -47,6 +47,7 @@ class AuthManager extends Component
 		{
 			$item = new AuthItem(
 				$name,
+				isset($params['type']) ? $params['type'] : AuthItem::TYPE_PERMISSION,
 				isset($params['description']) ? $params['description'] : '',
 				isset($params['rule']) ? $params['rule'] : null
 			);
@@ -76,7 +77,10 @@ class AuthManager extends Component
 	{
 		if(!$item->rule || eval($item->rule))
 		{
-			if(count($item->parents) == 0) return true;
+			if(count($item->parents) == 0)
+			{
+				return $item->type == AuthItem::TYPE_ROLE;
+			}
 
 			foreach($item->parents as $parent)
 				if($this->_checkItem($parent, $params) == true) return true;
