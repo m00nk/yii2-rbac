@@ -16,6 +16,7 @@ class AuthManager extends Component
 {
 	public $authFile = '@app/config/auth.php';
 
+	/** @var AuthItem[] */
 	private $_items = [];
 
 	public function init()
@@ -25,30 +26,61 @@ class AuthManager extends Component
 		$this->_load();
 	}
 
-	private function _clear()
+	public function checkAccess($userId, $name, $params = [])
 	{
-		$this->_items = [];
+		$item = $this->_findItem($name);
+		if($item) return $this->_checkItem($item, $params);
+		return false;
 	}
+
+	//======================================================
+	// PRIVATE
+	//======================================================
 
 	private function _load()
 	{
-		$this->_clear();
+		$this->_items = [];
 
 		$items = include($this->authFile);
 
-		$_ = 1;
+		foreach($items as $name => $params)
+		{
+			$item = new AuthItem(
+				$name,
+				isset($params['description']) ? $params['description'] : '',
+				isset($params['rule']) ? $params['rule'] : null
+			);
+
+			if(isset($params['children']))
+			{
+				foreach($params['children'] as $child)
+				{
+					$_ = $this->_findItem($child);
+					if($_) $_->parents[] = $item;
+				}
+			}
+
+			$this->_items[] = $item;
+		}
 	}
 
-
-
-
-
-
-
-
-
-	public function can($name)
+	private function _findItem($name)
 	{
-		var_dump($name); //todo remove this line
+		foreach($this->_items as $item)
+			if($item->name == $name) return $item;
+
+		return null;
+	}
+
+	private function _checkItem(AuthItem $item, $params)
+	{
+		if(!$item->rule || eval($item->rule))
+		{
+			if(count($item->parents) == 0) return true;
+
+			foreach($item->parents as $parent)
+				if($this->_checkItem($parent, $params) == true) return true;
+		}
+		return false;
 	}
 }

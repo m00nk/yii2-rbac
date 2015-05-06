@@ -14,7 +14,15 @@ class AuthItem
 	public $name;
 	public $description;
 	public $rule;
-	public $data;
 
+	public $parents;
 
+	public function __construct($name, $description='', $rule = null)
+	{
+		$this->name = $name;
+		$this->description = $description;
+		$this->rule = $rule;
+
+		$this->parents = [];
+	}
 }
