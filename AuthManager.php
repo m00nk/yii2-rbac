@@ -77,10 +77,7 @@ class AuthManager extends Component
 	{
 		if(!$item->rule || eval($item->rule))
 		{
-			if(count($item->parents) == 0)
-			{
-				return $item->type == AuthItem::TYPE_ROLE;
-			}
+			if($item->type == AuthItem::TYPE_ROLE) return true; // это роль - достигли цели
 
 			foreach($item->parents as $parent)
 				if($this->_checkItem($parent, $params) == true) return true;
