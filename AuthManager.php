@@ -28,6 +28,7 @@ class AuthManager extends Component
 
 	public function checkAccess($userId, $name, $params = [])
 	{
+		if(!array_key_exists('userId', $params)) $params['userId'] = $userId;
 		$item = $this->_findItem($name);
 		if($item) return $this->_checkItem($item, $params);
 		return false;
