@@ -99,3 +99,8 @@ if(\Yii::$app->user->can('permCreatePost')) ...
 if(\Yii::$app->user->can('permUpdatePost', ['id' => $post->id])) ...
 
 ```
+
+Начиная с версии 2.1.0 можно в качестве правил использовать инлайн-функции:
+```php
+'rule' => function($params){ return app\models\Post::mayEditPost($params["id"]); },
+```
