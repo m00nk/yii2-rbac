@@ -96,7 +96,7 @@ class AuthManager extends Component
 
 	private function _checkItem(AuthItem $item, $params)
 	{
-		$rulePassed = !$item->rule || eval($item->rule);
+		$rulePassed = !$item->rule ? true : (is_callable($item->rule) ? call_user_func($item->rule, $params) : eval($item->rule));
 
 		if($item->type == AuthItem::TYPE_ROLE && $rulePassed) return true; // это роль - достигли цели
 
