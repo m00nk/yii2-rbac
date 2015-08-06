@@ -87,6 +87,11 @@ return [
 ];
 ```
 
+Начиная с версии 2.1.0 можно в качестве правил использовать инлайн-функции:
+```php
+'rule' => function($params){ return app\models\Post::mayEditPost($params["id"]); },
+```
+
 ## Проверка прав в коде
 Проверка осуществлается стандартным способом:
 
@@ -98,9 +103,4 @@ if(\Yii::$app->user->can('permCreatePost')) ...
 // обратите внимание, что проверяется именно permUpdatePost, а не permUpdateOwnPost
 if(\Yii::$app->user->can('permUpdatePost', ['id' => $post->id])) ...
 
-```
-
-Начиная с версии 2.1.0 можно в качестве правил использовать инлайн-функции:
-```php
-'rule' => function($params){ return app\models\Post::mayEditPost($params["id"]); },
 ```
